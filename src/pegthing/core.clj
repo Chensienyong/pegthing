@@ -230,3 +230,24 @@
   (let [rows (Integer. (get-input 5))
         board (new-board rows)]
     (prompt-empty-peg board)))
+
+(defn attr
+  [attribute char]
+  (attribute (:attributes char)))
+
+(defn two-comp
+  [f g]
+  (fn [& args]
+    (f (apply g args))))
+
+(defn my-comp
+  [& fns]
+  (fn [& args]
+    (reduce #(%2 %1)
+            (apply (last fns) args) (rest (reverse fns)))))
+
+(defn my-assoc-in
+  [m [k & ks] v]
+  (if ks
+    (assoc m k (my-assoc-in (get m k) ks v))
+    (assoc m k v)))
